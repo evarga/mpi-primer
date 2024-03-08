@@ -13,7 +13,7 @@ using a network of multicore/multiprocessor nodes. The following topics are cove
 - How the [Message Passing Interface](https://www.mpi-forum.org) (MPI) paradigm helps attain good performance by splitting data among parallel processes potentially executing on different machines.
 - The illustration of the [Scatter/Gather](https://mpi4py.readthedocs.io/en/stable/tutorial.html#collective-communication) collective communication pattern in MPI.
 - What is a vectorized computation and how to do it in [NumPy](https://numpy.org).
-- Why virtual environments are so important, and to make one leveraging the standard Python 3+ toolset.
+- Why virtual environments are so important, and how to make one leveraging the standard Python 3+ toolset.
 - An example of a [fractal](https://en.wikipedia.org/wiki/Fractal) image called the [Mandelbrot set](https://en.wikipedia.org/wiki/Mandelbrot_set).
 - How to produce an animated GIF in Python using the [ImageIO](https://imageio.readthedocs.io/en/stable/) library.
 - How to parse command line arguments and provide a help system at the command line.
@@ -38,7 +38,7 @@ Follow the steps below to set up the virtual environment:
    ```bash
    pip install -r requirements.txt
    ```
-3. List the installed packages to verify that everything is installed correctly:
+3. List the available packages to verify that everything is installed correctly:
    ```bash
    pip list
    ```
