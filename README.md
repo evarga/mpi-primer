@@ -94,6 +94,9 @@ The following two images show how work is distributed among the processes (each 
 static scheduling the work is evenly distributed among the processes. Nevertheless, this doesn't mean that the actual 
 work done by each process will be the same.
 
+**Note:** all images below are animated GIFs, so wait couple of seconds for a transition to happen from the base image to
+the one depicting work distribution.
+
 <kbd>![Mandelbrot_with_2_processes and static scheduling](images/mandelbrot-static-p2.gif)</kbd>
 
 *Figure 1 - Work distribution among 2 processes with static scheduling.*
