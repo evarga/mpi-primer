@@ -86,8 +86,8 @@ master process, and imperfect load balancing.
 The following two images show how work is distributed among the processes (each assignment is colored differently). 
 The first image shows the work being distributed among two processes, and the second image shows the work being distributed among six processes. The source code of the program is available in the `mpi-mandelbrot.py` file. It contains detailed explanations of how the program works and why there is a greater imbalance with 6 processes.
 
-<kbd>![Mandelbrot_with_2_processes](images/mandelbrot-p2.gif)</kbd>
-<kbd>![Mandelbrot_with_6_processes](images/mandelbrot-p6.gif)</kbd>
+<kbd>![Mandelbrot_with_2_processes](images/mandelbrot_p2.gif)</kbd>
+<kbd>![Mandelbrot_with_6_processes](images/mandelbrot_p6.gif)</kbd>
 
 Here is the dump of the session producing a larger 2000x2000 image using different number of processes:
 ```
