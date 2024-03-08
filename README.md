@@ -80,8 +80,8 @@ The first argument is the width of the image, and the second argument is the hei
 
 Notice that the time it takes to run the program decreases as the number of processes increases. This is because the
 work is being distributed among the processes, and they are working in parallel. Nevertheless, the speedup is not 
-linear due to the overhead of communication between the processes, sequential stage of processing received parts by the 
-master process, and imperfect load balancing.
+linear when the number of processes is > 2 due to the overhead of communication between the processes, sequential stage of 
+processing received parts by the master process, and imperfect load balancing.
 
 The following two images show how work is distributed among the processes (each assignment is colored differently). 
 The first image shows the work being distributed among two processes, and the second image shows the work being distributed among six processes. The source code of the program is available in the `mpi-mandelbrot.py` file. It contains detailed explanations of how the program works and why there is a greater imbalance with 6 processes.
@@ -97,6 +97,15 @@ mpiexec -n 1 python mpi-mandelbrot.py --output large1.gif 2000 2000  58.68s user
 mpiexec -n 2 python mpi-mandelbrot.py --output large2.gif 2000 2000  66.84s user 10.09s system 198% cpu 38.845 total
 > time mpiexec -n 6 python mpi-mandelbrot.py --output large6.gif 2000 2000
 mpiexec -n 6 python mpi-mandelbrot.py --output large6.gif 2000 2000  157.65s user 11.12s system 547% cpu 30.824 total
+```
+Below, you have a case where, instead of increasing the data by x4, the amount of work per data chunk was increased by x4:
+```
+> time mpiexec -n 1 python mpi-mandelbrot.py --max_iterations 4000 1000 1000
+mpiexec -n 1 python mpi-mandelbrot.py --max_iterations 4000 1000 1000  46.47s user 4.65s system 101% cpu 50.579 total
+> time mpiexec -n 2 python mpi-mandelbrot.py --max_iterations 4000 1000 1000
+mpiexec -n 2 python mpi-mandelbrot.py --max_iterations 4000 1000 1000  51.64s user 1.03s system 202% cpu 25.989 total
+> time mpiexec -n 6 python mpi-mandelbrot.py --max_iterations 4000 1000 1000
+mpiexec -n 6 python mpi-mandelbrot.py --max_iterations 4000 1000 1000  109.64s user 2.46s system 579% cpu 19.357 total
 ```
 
 # Conclusion
