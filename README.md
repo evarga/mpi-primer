@@ -3,6 +3,8 @@
 -  [Usage](#usage)
     - [Setup](#setup)
     - [Running the Application](#running-the-application)
+      - [Static Scheduling](#static-scheduling)
+      - [Dynamic Scheduling](#dynamic-scheduling)
 -  [Conclusion](#conclusion)
 
 # Introduction
@@ -10,8 +12,10 @@ This is a teaching material aimed to demonstrate the powerfulness of the [Single
 with MPI[^1]. More specifically, this repo illustrates the foundational principles of distributed programming 
 using a network of multicore/multiprocessor nodes. The following topics are covered in this unit:
 
-- How the [Message Passing Interface](https://www.mpi-forum.org) (MPI) paradigm helps attain good performance by splitting data among parallel processes potentially executing on different machines.
+- How the [Message Passing Interface](https://www.mpi-forum.org) (MPI) paradigm helps attain good performance by splitting data among parallel 
+  processes potentially executing on different machines. Both static and dynamic scheduling are covered.
 - The illustration of the [Scatter/Gather](https://mpi4py.readthedocs.io/en/stable/tutorial.html#collective-communication) collective communication pattern in MPI.
+- The illustration of the [Send/Receive](https://mpi4py.readthedocs.io/en/stable/tutorial.html#point-to-point-communication) point-to-point communication pattern in MPI.
 - What is a vectorized computation and how to do it in [NumPy](https://numpy.org).
 - Why virtual environments are so important, and how to make one leveraging the standard Python 3+ toolset.
 - An example of a [fractal](https://en.wikipedia.org/wiki/Fractal) image called the [Mandelbrot set](https://en.wikipedia.org/wiki/Mandelbrot_set).
@@ -61,18 +65,21 @@ dependencies without them interfering with each other. It also makes it easy to 
 as they can create the same environment on their machine.
 
 ## Running the Application
-To read the help message, run the following command:
+To read the help message and learn what options are available run the following command:
 ```bash
 mpiexec -n 1 python mpi-mandelbrot.py --help
 ```
-Here is the dump of the session producing a smaller 1000x1000 image using different number of processes:
+
+### Static Scheduling
+Here is the dump of the session producing a smaller 1000x1000 image using different number of processes with 
+a default static scheduling policy (`--schedule=static`):
 ```
-> time mpiexec -n 1 python mpi-mandelbrot.py --output small1.gif 1000 1000
-mpiexec -n 1 python mpi-mandelbrot.py --output small1.gif 1000 1000  13.49s user 1.65s system 102% cpu 14.816 total
-> time mpiexec -n 2 python mpi-mandelbrot.py --output small2.gif 1000 1000
-mpiexec -n 2 python mpi-mandelbrot.py --output small2.gif 1000 1000  15.25s user 0.94s system 208% cpu 7.782 total
-> time mpiexec -n 6 python mpi-mandelbrot.py --output small6.gif 1000 1000
-mpiexec -n 6 python mpi-mandelbrot.py --output small6.gif 1000 1000  32.60s user 2.01s system 532% cpu 6.496 total
+> time mpiexec -n 1 python mpi-mandelbrot.py 1000 1000
+mpiexec -n 1 python mpi-mandelbrot.py 1000 1000  12.66s user 1.47s system 104% cpu 13.504 total
+> time mpiexec -n 2 python mpi-mandelbrot.py 1000 1000                                         
+mpiexec -n 2 python mpi-mandelbrot.py 1000 1000  14.36s user 0.96s system 202% cpu 7.556 total
+> time mpiexec -n 6 python mpi-mandelbrot.py 1000 1000
+mpiexec -n 6 python mpi-mandelbrot.py 1000 1000  29.37s user 1.88s system 566% cpu 5.514 total
 ```
 The `time` command is used to measure the time it takes to run the program. The `mpiexec` command is used to run the 
 program with a different number of processes. The `--output` option is used to specify the name of the output file. 
@@ -83,29 +90,67 @@ work is being distributed among the processes, and they are working in parallel.
 linear when the number of processes is > 2 due to the overhead of communication between the processes, sequential stage of 
 processing received parts by the master process, and imperfect load balancing.
 
-The following two images show how work is distributed among the processes (each assignment is colored differently). 
-The first image shows the work being distributed among two processes, and the second image shows the work being distributed among six processes. The source code of the program is available in the `mpi-mandelbrot.py` file. It contains detailed explanations of how the program works and why there is a greater imbalance with 6 processes.
+The following two images show how work is distributed among the processes (each assignment is colored differently). In
+static scheduling the work is evenly distributed among the processes. Nevertheless, this doesn't mean that the actual 
+work done by each process will be the same.
 
-<kbd>![Mandelbrot_with_2_processes](images/mandelbrot_p2.gif)</kbd>
-<kbd>![Mandelbrot_with_6_processes](images/mandelbrot_p6.gif)</kbd>
+<kbd>![Mandelbrot_with_2_processes and static scheduling](images/mandelbrot-static-p2.gif)</kbd>
+<p align="center">Figure 1 - Work distribution among 2 processes with static scheduling.</p>
+<kbd>![Mandelbrot_with_6_processes and static scheduling](images/mandelbrot-static-p6.gif)</kbd>
+<p align="center">Figure 2 - Work distribution among 6 processes with static scheduling.</p>
 
-Here is the dump of the session producing a larger 2000x2000 image using different number of processes:
+Here is the dump of the session producing a larger 2000x2000 image using different number of processes with 
+a default static scheduling policy:
 ```
-> time mpiexec -n 1 python mpi-mandelbrot.py --output large1.gif 2000 2000
-mpiexec -n 1 python mpi-mandelbrot.py --output large1.gif 2000 2000  58.68s user 11.48s system 100% cpu 1:09.60 total
-> time mpiexec -n 2 python mpi-mandelbrot.py --output large2.gif 2000 2000
-mpiexec -n 2 python mpi-mandelbrot.py --output large2.gif 2000 2000  66.84s user 10.09s system 198% cpu 38.845 total
-> time mpiexec -n 6 python mpi-mandelbrot.py --output large6.gif 2000 2000
-mpiexec -n 6 python mpi-mandelbrot.py --output large6.gif 2000 2000  157.65s user 11.12s system 547% cpu 30.824 total
+> time mpiexec -n 1 python mpi-mandelbrot.py 2000 2000
+mpiexec -n 1 python mpi-mandelbrot.py 2000 2000  58.38s user 11.62s system 100% cpu 1:09.75 total
+> time mpiexec -n 2 python mpi-mandelbrot.py 2000 2000
+mpiexec -n 2 python mpi-mandelbrot.py 2000 2000  62.69s user 9.36s system 199% cpu 36.119 total
+> time mpiexec -n 6 python mpi-mandelbrot.py 2000 2000
+mpiexec -n 6 python mpi-mandelbrot.py 2000 2000  145.42s user 9.73s system 576% cpu 26.920 total
 ```
-Below, you have a case where, instead of increasing the data by x4, the amount of work per data chunk was increased by x4:
+Below, you have a case where, instead of increasing the data by x4, the amount of work per data chunk was increased by 
+a factor x4. Observe that times are lower since less amount of data circulate around.
 ```
 > time mpiexec -n 1 python mpi-mandelbrot.py --max_iterations 4000 1000 1000
-mpiexec -n 1 python mpi-mandelbrot.py --max_iterations 4000 1000 1000  46.47s user 4.65s system 101% cpu 50.579 total
+mpiexec -n 1 python mpi-mandelbrot.py --max_iterations 4000 1000 1000  51.37s user 4.86s system 100% cpu 55.873 total
 > time mpiexec -n 2 python mpi-mandelbrot.py --max_iterations 4000 1000 1000
-mpiexec -n 2 python mpi-mandelbrot.py --max_iterations 4000 1000 1000  51.64s user 1.03s system 202% cpu 25.989 total
+mpiexec -n 2 python mpi-mandelbrot.py --max_iterations 4000 1000 1000  51.53s user 1.04s system 202% cpu 25.980 total
 > time mpiexec -n 6 python mpi-mandelbrot.py --max_iterations 4000 1000 1000
-mpiexec -n 6 python mpi-mandelbrot.py --max_iterations 4000 1000 1000  109.64s user 2.46s system 579% cpu 19.357 total
+mpiexec -n 6 python mpi-mandelbrot.py --max_iterations 4000 1000 1000  110.84s user 2.48s system 588% cpu 19.269 total
+```
+
+### Dynamic Scheduling
+To implement dynamic scheduling, we need to change the way we distribute the work among the processes. Instead of 
+dividing the total work into equal parts and assigning each part to a process at the beginning, 
+we will divide the work into smaller chunks and assign each chunk to a process when it becomes available.
+
+The following two images show how work is distributed among the processes (each assignment is colored differently). In
+dynamic scheduling the work is not evenly distributed among the processes. They wait for the master process to send them
+a new chunk of work when they are done with the previous one. The master process itself is also doing work when nothing
+is ready from workers.
+
+<kbd>![Mandelbrot_with_2_processes and dynamic scheduling](images/mandelbrot-dynamic-p2.gif)</kbd>
+<p align="center">Figure 3 - Work distribution among 2 processes with dynamic scheduling.</p>
+<kbd>![Mandelbrot_with_6_processes and dynamic scheduling](images/mandelbrot-dynamic-p6.gif)</kbd>
+<p align="center">Figure 4 - Work distribution among 6 processes with dynamic scheduling.</p>
+
+Here is the dump of the session producing a larger 2000x2000 image using different number of processes with 
+a dynamic scheduling policy:
+```
+> time mpiexec -n 1 python mpi-mandelbrot.py --schedule=dynamic 2000 2000
+mpiexec -n 1 python mpi-mandelbrot.py --schedule=dynamic 2000 2000  39.86s user 3.92s system 101% cpu 43.270 total
+> time mpiexec -n 2 python mpi-mandelbrot.py --schedule=dynamic 2000 2000
+mpiexec -n 2 python mpi-mandelbrot.py --schedule=dynamic 2000 2000  44.24s user 1.21s system 199% cpu 22.760 total
+> time mpiexec -n 6 python mpi-mandelbrot.py --schedule=dynamic 2000 2000
+mpiexec -n 6 python mpi-mandelbrot.py --schedule=dynamic 2000 2000  74.69s user 2.55s system 550% cpu 14.027 total
+```
+The times are lower than in the static scheduling case. This is especially evident when instead of increasing the 
+amount of data we rise the number of iterations. Here is an example of a 1000x1000 image with 4000 iterations and 6
+processes:
+```
+> time mpiexec -n 6  python mpi-mandelbrot.py --schedule=dynamic --max_iterations 4000 1000 1000
+mpiexec -n 6 python mpi-mandelbrot.py --schedule=dynamic --max_iterations 400  53.19s user 2.95s system 574% cpu 9.774 total
 ```
 
 # Conclusion
