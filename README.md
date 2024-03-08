@@ -95,9 +95,12 @@ static scheduling the work is evenly distributed among the processes. Neverthele
 work done by each process will be the same.
 
 <kbd>![Mandelbrot_with_2_processes and static scheduling](images/mandelbrot-static-p2.gif)</kbd>
-<p align="center">Figure 1 - Work distribution among 2 processes with static scheduling.</p>
-<kbd>![Mandelbrot_with_6_processes and static scheduling](images/mandelbrot-static-p6.gif)</kbd>
-<p align="center">Figure 2 - Work distribution among 6 processes with static scheduling.</p>
+
+*Figure 1 - Work distribution among 2 processes with static scheduling.*
+
+<kbd>![Mandelbrot with 6 processes and static scheduling](images/mandelbrot-static-p6.gif)</kbd>
+
+*Figure 2 - Work distribution among 6 processes with static scheduling.*
 
 Here is the dump of the session producing a larger 2000x2000 image using different number of processes with 
 a default static scheduling policy:
@@ -131,9 +134,12 @@ a new chunk of work when they are done with the previous one. The master process
 is ready from workers.
 
 <kbd>![Mandelbrot_with_2_processes and dynamic scheduling](images/mandelbrot-dynamic-p2.gif)</kbd>
-<p align="center">Figure 3 - Work distribution among 2 processes with dynamic scheduling.</p>
+
+*Figure 3 - Work distribution among 2 processes with dynamic scheduling.*
+
 <kbd>![Mandelbrot_with_6_processes and dynamic scheduling](images/mandelbrot-dynamic-p6.gif)</kbd>
-<p align="center">Figure 4 - Work distribution among 6 processes with dynamic scheduling.</p>
+
+*Figure 4 - Work distribution among 6 processes with dynamic scheduling.*
 
 Here is the dump of the session producing a larger 2000x2000 image using different number of processes with 
 a dynamic scheduling policy:
