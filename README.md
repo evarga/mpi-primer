@@ -90,7 +90,7 @@ work is being distributed among the processes, and they are working in parallel.
 linear when the number of processes is > 2 due to the overhead of communication between the processes, sequential stage of 
 processing received parts by the master process, and imperfect load balancing.
 
-The following two images show how work is distributed among the processes (each assignment is colored differently). In
+The following two images show how work is distributed among the processes (each process is colored differently). In
 static scheduling the work is evenly distributed among the processes. Nevertheless, this doesn't mean that the actual 
 work done by each process will be the same.
 
@@ -131,7 +131,7 @@ To implement dynamic scheduling, we need to change the way we distribute the wor
 dividing the total work into equal parts and assigning each part to a process at the beginning, 
 we will divide the work into smaller chunks and assign each chunk to a process when it becomes available.
 
-The following two images show how work is distributed among the processes (each assignment is colored differently). In
+The following two images show how work is distributed among the processes (each process is colored differently). In
 dynamic scheduling the work is not evenly distributed among the processes. They wait for the master process to send them
 a new chunk of work when they are done with the previous one. The master process itself is also doing work when nothing
 is ready from workers.
@@ -155,7 +155,7 @@ mpiexec -n 2 python mpi-mandelbrot.py --schedule=dynamic 2000 2000  44.24s user 
 mpiexec -n 6 python mpi-mandelbrot.py --schedule=dynamic 2000 2000  74.69s user 2.55s system 550% cpu 14.027 total
 ```
 The times are lower than in the static scheduling case. This is especially evident when instead of increasing the 
-amount of data we rise the number of iterations. Here is an example of a 1000x1000 image with 4000 iterations and 6
+amount of data we rise the number of iterations. Here is an example of a 1000x1000 image with 4000 iterations per pixel and 6
 processes:
 ```
 > time mpiexec -n 6  python mpi-mandelbrot.py --schedule=dynamic --max_iterations 4000 1000 1000
