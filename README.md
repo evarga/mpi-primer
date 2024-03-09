@@ -163,7 +163,8 @@ mpiexec -n 6 python mpi-mandelbrot.py --schedule=dynamic --max_iterations 400  5
 ```
 
 # Conclusion
-This project demonstrates the importance and usefulness of knowing ways to easily employ parallel and distributed programming concepts. Observe that you can easily scale the above examples to execute processes on different nodes. All this is 
+This project demonstrates the importance and usefulness of knowing ways to easily employ parallel and distributed programming concepts. 
+Observe that you can easily scale the above examples to execute processes on different nodes. All this is 
 completely handled by the underlying infrastructure. No need to touch the source code. MPI is a powerful tool for
 distributed computing, and it is widely used in the scientific community. The beauty is that your code can be written 
 as a sequential program with well-defined synchronization points.
@@ -172,6 +173,12 @@ It is very important to implement your code run by any worker process in efficie
 computation is employed thankfully to the NumPy library. Another popular hybrid parallel programming model is the 
 combination of MPI and OpenMP[^2]. The former is used for distributed memory parallelism, and the latter is used for
 shared memory parallelism.
+
+Evidently, load balancing is of crucial importance to attain good performance. In this case study, dynamic scheduling
+has turned out to be a better option, although this cannot be generalized. Sometimes a simple static scheduling
+achieves better results, when evenly distributing a work is OK. For example, calculating a definite integral over some
+range could be parallelized by splitting this range into equal subranges; no need for extra complexity and
+overhead of dynamic scheduling.
 
 [^1]: This project uses the [MPI for Python](https://mpi4py.readthedocs.io/en/stable/index.html) distribution.
 [^2]: There is a separate [educational unit](https://github.com/evarga/openmp-primer) showcasing OpenMP.
