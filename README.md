@@ -1,12 +1,3 @@
-# Table of Contents
--  [Introduction](#introduction)
--  [Usage](#usage)
-    - [Setup](#setup)
-    - [Running the Application](#running-the-application)
-      - [Static Scheduling](#static-scheduling)
-      - [Dynamic Scheduling](#dynamic-scheduling)
--  [Conclusion](#conclusion)
-
 # Introduction
 This is a teaching material aimed to demonstrate the powerfulness of the [Single Program Multiple Data](https://www.geeksforgeeks.org/single-program-multiple-data-spmd-model/) (SPMD) paradigm 
 with MPI[^1]. More specifically, this repo illustrates the foundational principles of distributed programming 
