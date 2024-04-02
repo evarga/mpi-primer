@@ -21,19 +21,22 @@ If this is not the case, then you will need to adjust the instructions below acc
 expected to use the [Cygwin](https://www.cygwin.com) environment.
 
 ## Setup
-Follow the steps below to set up the virtual environment:
-
-1. Create a virtual environment and activate it:
+For educational purposes all steps related to handling a virtual environment are explicitly enrolled and expected to be manually executed. You can automate
+all these steps. for example, using Codespaces.
+1. Execute the next step only once inside the cloned project:
    ```bash
    python -m venv .venv
+   ```
+2. At the beginning of a session active your virtual environment by running:
+   ```bash
    source .venv/bin/activate
    ```
    As a sanity check you may want to run `echo $VIRTUAL_ENV` to see if the environment is activated.
-2. Install the required packages:
+3. Install the required packages:
    ```bash
    pip install -r requirements.txt
    ```
-3. List the available packages to verify that everything is installed correctly:
+4. List the available packages to verify that everything is installed correctly:
    ```bash
    pip list
    ```
@@ -47,7 +50,7 @@ Follow the steps below to set up the virtual environment:
    pillow  10.2.0
    pip     24.0
    ```
-4. Deactivate the virtual environment once you are done running this project:
+5. Deactivate the virtual environment once you are done running this project:
    ```bash
    deactivate
    ```
