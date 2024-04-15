@@ -1,4 +1,4 @@
 imageio==2.34.0
-mpi4py==3.1.5
+mpi4py==3.1.6
 numpy==1.26.4
 pillow==10.3.0
